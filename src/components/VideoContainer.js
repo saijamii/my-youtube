@@ -9,7 +9,6 @@ const VideoContainer = () => {
     const data = await fetch(YOUTUBE_VIDEO_API);
     const json = await data.json();
     setVideos(json.items);
-    console.log(json.items); // Logging the fetched videos
   };
 
   useEffect(() => {
@@ -17,7 +16,7 @@ const VideoContainer = () => {
   }, []);
 
   return (
-    <div className="flex">
+    <div className="flex flex-wrap">
       {videos?.map((video) => (
         <VideoCard info={video} key={video.id} />
       ))}
