@@ -1,8 +1,11 @@
 import React from "react";
+// import { useSelector } from "react-redux";
 
 const VideoCard = ({ info }) => {
   const { snippet, statistics } = info;
   const { channelTitle, title, thumbnails } = snippet;
+  // const isMenuOpen = useSelector((store) => store.app.isMenuOpen);
+  // const cardWidth = isMenuOpen ? "w-64" : "w-80";
 
   return (
     <div className="p-2 m-2 w-72 shadow-lg">
