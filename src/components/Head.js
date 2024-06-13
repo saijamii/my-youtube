@@ -1,13 +1,37 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { toggleMenu } from "../Utils/appSlice";
 
 const Head = () => {
+  useEffect(() => {
+    // getData();
+  }, []);
   const dispatch = useDispatch();
 
   const handleToggleMenu = () => {
     dispatch(toggleMenu());
   };
+
+  const YOUTUBE_SEARCH_API = "https://www.googleapis.com/youtube/v3/search";
+  const API_KEY = "AIzaSyDo6l411i4StVx3BugFdqjOWVKIEJdEG0c";
+
+  const getSearchSuggestions = async (text) => {
+    const params = new URLSearchParams({
+      key: API_KEY,
+      q: text,
+    });
+
+    const url = `${YOUTUBE_SEARCH_API}?${params}`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // Process and use the data
+    console.log(data);
+    // You can access items like data.items, which contains search results
+  };
+
+  getSearchSuggestions("777");
 
   return (
     <div className="grid grid-flow-col p-5 m-2 shadow-lg">
