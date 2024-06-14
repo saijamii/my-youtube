@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { IoSearchSharp } from "react-icons/io5";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../Utils/appSlice";
 import { AUTOCOMPLETE_API } from "../Utils/constants";
+import { cacheResults } from "../Utils/searchSlice";
 
 const Head = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const searchCache = useSelector((store) => store.search);
   useEffect(() => {
     const timer = setTimeout(() => {
-      getSearchSuggestions();
-    }, 200);
+      if (searchCache[searchQuery]) {
+        setSuggestions(searchCache[searchQuery]);
+      } else {
+        getSearchSuggestions();
+      }
+    }, 300);
 
     return () => {
       clearTimeout(timer);
@@ -30,6 +36,7 @@ const Head = () => {
     const data = await fetch(AUTOCOMPLETE_API + searchQuery);
     const json = await data.json();
     setSuggestions(json[1]);
+    dispatch(cacheResults({ [searchQuery]: json[1] }));
   };
 
   return (
