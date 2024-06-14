@@ -1,37 +1,32 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toggleMenu } from "../Utils/appSlice";
+import { AUTOCOMPLETE_API } from "../Utils/constants";
 
 const Head = () => {
+  const [searchQuery, setSearchQuery] = useState("");
   useEffect(() => {
-    // getData();
-  }, []);
+    const timer = setTimeout(() => {
+      getSearchSuggestions();
+    }, 200);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchQuery]);
+
   const dispatch = useDispatch();
 
   const handleToggleMenu = () => {
     dispatch(toggleMenu());
   };
 
-  const YOUTUBE_SEARCH_API = "https://www.googleapis.com/youtube/v3/search";
-  const API_KEY = "AIzaSyDo6l411i4StVx3BugFdqjOWVKIEJdEG0c";
-
-  const getSearchSuggestions = async (text) => {
-    const params = new URLSearchParams({
-      key: API_KEY,
-      q: text,
-    });
-
-    const url = `${YOUTUBE_SEARCH_API}?${params}`;
-
-    const response = await fetch(url);
-    const data = await response.json();
-
-    // Process and use the data
-    console.log(data);
-    // You can access items like data.items, which contains search results
+  const getSearchSuggestions = async () => {
+    console.log("Api Called -" + searchQuery);
+    const data = await fetch(AUTOCOMPLETE_API + searchQuery);
+    const json = await data.json();
+    console.log(json);
   };
-
-  getSearchSuggestions("777");
 
   return (
     <div className="grid grid-flow-col p-5 m-2 shadow-lg">
@@ -55,6 +50,7 @@ const Head = () => {
         <input
           type="text"
           className="w-1/2 border border-gray-400 p-1 rounded-l-full"
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
         <button className="px-2 py-1 bg-gray-300 border border-gray-500 p-1 rounded-r-full">
           Search
