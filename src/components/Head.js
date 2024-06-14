@@ -33,7 +33,7 @@ const Head = () => {
   };
 
   return (
-    <div className="grid grid-flow-col p-5 m-2 shadow-lg">
+    <div className="grid grid-flow-col p-5 m-2 shadow-lg ">
       <div className="flex col-span-1">
         <img
           onClick={handleToggleMenu}
@@ -62,7 +62,7 @@ const Head = () => {
           Search
         </button>
         {showSuggestions && (
-          <div className="fixed bg-white py-2 px-2 w-[37rem] shadow-lg rounded-lg border border-gray-100">
+          <div className="absolute bg-white py-2 px-2 w-[37rem] shadow-lg rounded-lg border border-gray-100">
             <ul>
               {suggestions.map((s) => (
                 <li
