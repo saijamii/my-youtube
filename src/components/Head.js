@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { IoSearchSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../Utils/appSlice";
@@ -6,6 +6,8 @@ import { AUTOCOMPLETE_API } from "../Utils/constants";
 import { cacheResults } from "../Utils/searchSlice";
 
 const Head = () => {
+  const suggestionsRef = useRef(null);
+  const inputRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -25,18 +27,40 @@ const Head = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
 
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const dispatch = useDispatch();
 
   const handleToggleMenu = () => {
     dispatch(toggleMenu());
   };
 
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
   const getSearchSuggestions = async () => {
-    console.log("Api Called -" + searchQuery);
     const data = await fetch(AUTOCOMPLETE_API + searchQuery);
     const json = await data.json();
     setSuggestions(json[1]);
     dispatch(cacheResults({ [searchQuery]: json[1] }));
+  };
+
+  const handleClickOutside = (e) => {
+    console.log(inputRef.current && inputRef.current.contains(e.target));
+    if (
+      suggestionsRef.current &&
+      !suggestionsRef.current.contains(e.target) &&
+      inputRef.current &&
+      !inputRef.current.contains(e.target)
+    ) {
+      setShowSuggestions(false);
+    }
   };
 
   return (
@@ -60,24 +84,31 @@ const Head = () => {
       <div className="col-span-10 px-10">
         <input
           type="text"
+          value={searchQuery}
+          ref={inputRef}
           className="w-1/2 border border-gray-400 p-1 rounded-l-full"
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={() => setShowSuggestions(true)}
-          onBlur={() => setShowSuggestions(false)}
+          onBlur={handleClickOutside}
         />
         <button className="px-2 py-1 bg-gray-300 border border-gray-500 p-1 rounded-r-full">
           Search
         </button>
         {showSuggestions && (
-          <div className="absolute bg-white py-2 px-2 w-[37rem] shadow-lg rounded-lg border border-gray-100">
+          <div
+            ref={suggestionsRef}
+            className="absolute bg-white py-2 px-2 w-[37rem] shadow-lg rounded-lg border border-gray-100"
+          >
             <ul>
               {suggestions.map((s) => (
-                <li
-                  key={s}
-                  className=" flex py-2 px-3 shadow-sm hover:bg-gray-100"
-                >
-                  <IoSearchSharp className="my-1 mr-2" /> <span> {s} </span>
-                </li>
+                <div onClick={() => handleSearch(s)}>
+                  <li
+                    key={s}
+                    className=" flex py-2 px-3 shadow-sm hover:bg-gray-100"
+                  >
+                    <IoSearchSharp className="my-1 mr-2" /> <span> {s} </span>
+                  </li>
+                </div>
               ))}
             </ul>
           </div>
