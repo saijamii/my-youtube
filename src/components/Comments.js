@@ -45,7 +45,14 @@ const commentsData = [
   },
 ];
 const CommentsList = ({ commnets }) => {
-  return commnets?.map((e, index) => <Comment key={e.id || index} data={e} />);
+  return commnets?.map((record, index) => (
+    <div key={record.id || index} >
+      <Comment data={record} />
+      <div className="ml-5 pl-5 border border-l-black ">
+        <CommentsList commnets={record.replies} />
+      </div>
+    </div>
+  ));
 };
 
 const Comment = ({ data }) => {
