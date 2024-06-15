@@ -44,6 +44,10 @@ const commentsData = [
     replies: [],
   },
 ];
+const CommentsList = ({ commnets }) => {
+  return commnets?.map((e, index) => <Comment key={e.id || index} data={e} />);
+};
+
 const Comment = ({ data }) => {
   const { name, text, replies } = data;
   return (
@@ -65,7 +69,7 @@ const Comments = () => {
   return (
     <div className="m-5 p-2 ">
       <h1 className="text-2xl font-bold">Comments : </h1>
-      <Comment data={commentsData[0]} />
+      <CommentsList commnets={commentsData} />
     </div>
   );
 };
