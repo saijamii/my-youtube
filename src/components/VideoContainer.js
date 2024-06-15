@@ -2,8 +2,17 @@ import React, { useEffect, useState } from "react";
 import { YOUTUBE_VIDEO_API } from "./../Utils/constants";
 import VideoCard, { AdVideoCard } from "./VideoCard";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { openMenu } from "../Utils/appSlice";
 
 const VideoContainer = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    getVideos();
+    dispatch(openMenu());
+  }, []);
+
   const [videos, setVideos] = useState([]);
 
   const getVideos = async () => {
@@ -11,10 +20,6 @@ const VideoContainer = () => {
     const json = await data.json();
     setVideos(json.items);
   };
-
-  useEffect(() => {
-    getVideos();
-  }, []);
 
   return (
     <div className="flex flex-wrap">
