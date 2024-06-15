@@ -52,7 +52,6 @@ const Head = () => {
   };
 
   const handleClickOutside = (e) => {
-    console.log(inputRef.current && inputRef.current.contains(e.target));
     if (
       suggestionsRef.current &&
       !suggestionsRef.current.contains(e.target) &&
@@ -104,9 +103,14 @@ const Head = () => {
                 <div onClick={() => handleSearch(s)}>
                   <li
                     key={s}
-                    className=" flex py-2 px-3 shadow-sm hover:bg-gray-100"
+                    className=" custom-bg-color my-1 p-1 hover:bg-gray-300"
                   >
-                    <IoSearchSharp className="my-1 mr-2" /> <span> {s} </span>
+                    <img
+                      className="mr-2 h-4 ml-3 inline-block"
+                      alt="search-icon"
+                      src="https://cdn-icons-png.flaticon.com/512/482/482631.png"
+                    />
+                    <span>{s}</span>
                   </li>
                 </div>
               ))}
