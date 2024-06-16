@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import ChatMessage from "./ChatMessage";
 import { useDispatch, useSelector } from "react-redux";
 import { addMessage } from "../Utils/chatSlice";
+import { generateRandomMessage, generateRandomName } from "../Utils/helper";
 
 function LiveChat() {
   const dispatch = useDispatch();
@@ -12,8 +13,8 @@ function LiveChat() {
     const i = setInterval(() => {
       dispatch(
         addMessage({
-          name: "SJ",
-          message: "Hey this is Live Comment " + id++,
+          name: generateRandomName(),
+          message: generateRandomMessage(15) + id++,
         })
       );
     }, 2000);
