@@ -14,10 +14,10 @@ function LiveChat() {
       dispatch(
         addMessage({
           name: generateRandomName(),
-          message: generateRandomMessage(15) + id++,
+          message: generateRandomMessage(15) + " " + id++,
         })
       );
-    }, 2000);
+    }, 1000);
 
     return () => clearInterval(i);
     // eslint-disable-next-line react-hooks/exhaustive-deps

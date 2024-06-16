@@ -6,7 +6,7 @@ const ChatMessage = ({ name, message }) => {
         alt="user"
         src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
       />
-      <span className="font-bold px-0.5">{name}</span>
+      <span className="font-bold px-0.5 text-sm">{name}</span>
       <span className="text-sm">{message}</span>
     </div>
   );

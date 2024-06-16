@@ -10,6 +10,7 @@ const WatchPage = () => {
   const [searchParams] = useSearchParams();
   useEffect(() => {
     dispatch(closeMenu());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -17,7 +18,7 @@ const WatchPage = () => {
       <div className="px-5 flex w-full">
         <div className="">
           <iframe
-            width="1200"
+            width="1100"
             height="525"
             src={"https://www.youtube.com/embed/" + searchParams.get("v")}
             title="YouTube video player"
