@@ -11,6 +11,7 @@ const VideoContainer = () => {
   useEffect(() => {
     getVideos();
     dispatch(openMenu());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [videos, setVideos] = useState([]);

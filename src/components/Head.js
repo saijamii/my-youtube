@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { IoSearchSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../Utils/appSlice";
 import { AUTOCOMPLETE_API } from "../Utils/constants";
