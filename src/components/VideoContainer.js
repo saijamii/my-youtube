@@ -11,7 +11,9 @@ const VideoContainer = () => {
   useEffect(() => {
     getVideos();
     dispatch(openMenu());
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [videos, setVideos] = useState([]);
@@ -20,6 +22,19 @@ const VideoContainer = () => {
     const data = await fetch(YOUTUBE_VIDEO_API);
     const json = await data.json();
     setVideos(json.items);
+  };
+
+  const isBottomOfPage = () => {
+    return (
+      window.innerHeight + window.scrollY >=
+      document.documentElement.scrollHeight
+    );
+  };
+
+  const handleScroll = () => {
+    if (isBottomOfPage()) {
+      console.log("Page Bottom");
+    }
   };
 
   return (
