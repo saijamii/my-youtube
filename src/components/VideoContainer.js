@@ -24,11 +24,19 @@ const VideoContainer = () => {
   }, []);
 
   const [videos, setVideos] = useState([]);
+  const [nextPageToken, setNextPageToken] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const getVideos = async () => {
-    const data = await fetch(YOUTUBE_VIDEO_API);
-    const json = await data.json();
-    setVideos(json.items);
+    setLoading(true);
+    const url = nextPageToken
+      ? `${YOUTUBE_VIDEO_API}&pageToken=${nextPageToken}`
+      : YOUTUBE_VIDEO_API;
+    const response = await fetch(url);
+    const data = await response.json();
+    setVideos((prevVideos) => [...prevVideos, ...data.items]);
+    setNextPageToken(data.nextPageToken);
+    setLoading(false);
   };
 
   const isBottomOfPage = () => {
@@ -39,16 +47,17 @@ const VideoContainer = () => {
   };
 
   const handleScroll = () => {
-    if (isBottomOfPage()) {
+    if (isBottomOfPage() && !loading) {
       console.log("Page Bottom");
+      getVideos();
     }
   };
 
   return (
     <div className="flex flex-wrap">
       {videos[0] && <AdVideoCard info={videos[0]} />}
-      {videos?.map((video) => (
-        <Link key={video.id} to={`/watch?v=${video.id}`}>
+      {videos?.map((video, id) => (
+        <Link key={id} to={`/watch?v=${video.id}`}>
           <VideoCard info={video} />
         </Link>
       ))}
