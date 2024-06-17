@@ -11,7 +11,14 @@ const VideoContainer = () => {
   useEffect(() => {
     getVideos();
     dispatch(openMenu());
-    window.addEventListener("scroll", handleScroll);
+
+    let timer;
+    window.addEventListener("scroll", () => {
+      clearTimeout(timer);
+      timer = setTimeout(handleScroll, 1000);
+    });
+
+    // window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
