@@ -191,3 +191,16 @@ export function generateRandomMessage(length) {
   }
   return result;
 }
+
+export function throttle(func, delay) {
+  let lastCall = 0;
+  return function (...args) {
+    const now = new Date().getTime();
+    if (now - lastCall < delay) {
+      return;
+    }
+    console.log(`Throttle called at ${now - lastCall}`);
+    lastCall = now;
+    return func(...args);
+  };
+}

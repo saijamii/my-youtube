@@ -1,30 +1,45 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { YOUTUBE_VIDEO_API } from "./../Utils/constants";
 import VideoCard, { AdVideoCard } from "./VideoCard";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { openMenu } from "../Utils/appSlice";
+import { throttle } from "../Utils/helper";
 
 const VideoContainer = () => {
   const [videos, setVideos] = useState([]);
   const [nextPageToken, setNextPageToken] = useState("");
-  console.log(nextPageToken, "nextPageToken");
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
     getVideos();
     dispatch(openMenu());
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, []);
 
+  const handleScroll = useCallback(() => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.scrollHeight - 500 &&
+      !loading
+    ) {
+      getVideos();
+    }
+  // eslint-disable-next-line
+  }, [loading]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const throttledHandleScroll = useCallback(throttle(handleScroll, 500), [
+    handleScroll,
+  ]);
+
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll, true);
+    window.addEventListener("scroll", throttledHandleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll, true);
+      window.removeEventListener("scroll", throttledHandleScroll);
     };
-  }, [nextPageToken]);
+  }, [handleScroll, throttledHandleScroll]);
 
   const getVideos = async () => {
     setLoading(true);
@@ -33,23 +48,9 @@ const VideoContainer = () => {
       : YOUTUBE_VIDEO_API;
     const response = await fetch(url);
     const data = await response.json();
-    setVideos((prevVideos) => [...prevVideos, ...data.items]);
+    setVideos([...videos, ...data.items]);
     setNextPageToken(data.nextPageToken);
     setLoading(false);
-  };
-
-  const isBottomOfPage = () => {
-    return (
-      window.innerHeight + window.scrollY >=
-      document.documentElement.scrollHeight
-    );
-  };
-
-  const handleScroll = () => {
-    if (isBottomOfPage() && !loading) {
-      console.log("Page Bottom");
-      getVideos();
-    }
   };
 
   return (
