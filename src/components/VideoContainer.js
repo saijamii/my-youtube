@@ -6,26 +6,25 @@ import { useDispatch } from "react-redux";
 import { openMenu } from "../Utils/appSlice";
 
 const VideoContainer = () => {
+  const [videos, setVideos] = useState([]);
+  const [nextPageToken, setNextPageToken] = useState("");
+  console.log(nextPageToken, "nextPageToken");
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
     getVideos();
     dispatch(openMenu());
 
-    let timer;
-    window.addEventListener("scroll", () => {
-      clearTimeout(timer);
-      timer = setTimeout(handleScroll, 1000);
-    });
-
-    // window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const [videos, setVideos] = useState([]);
-  const [nextPageToken, setNextPageToken] = useState("");
-  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, true);
+    return () => {
+      window.removeEventListener("scroll", handleScroll, true);
+    };
+  }, [nextPageToken]);
 
   const getVideos = async () => {
     setLoading(true);
