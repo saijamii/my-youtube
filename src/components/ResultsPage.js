@@ -10,6 +10,7 @@ const ResultsPage = () => {
   console.log(searchParams.get("search_query"));
   useEffect(() => {
     dispatch(closeMenu());
+  // eslint-disable-next-line
   }, []);
   return (
     <div className="grow  h-full overflow-y-auto bg-white">
