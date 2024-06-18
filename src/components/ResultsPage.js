@@ -33,12 +33,11 @@ const ResultsPage = () => {
   };
 
   return (
-    <div className="grow  h-full overflow-y-auto bg-white">
-      <div className="grid grid-cols-1 gap-2 p-5">
-        <SearchResultVideoCard
-          key={resultVideos[0]?.id?.videoId}
-          video={resultVideos[0]}
-        />
+    <div className="overflow-y-auto">
+      <div className="p-4 mx-1">
+        {resultVideos?.map((video, id) => (
+          <SearchResultVideoCard key={video?.id?.videoId} video={video} />
+        ))}
       </div>
     </div>
   );
