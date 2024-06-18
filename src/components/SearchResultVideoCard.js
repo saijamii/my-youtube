@@ -1,16 +1,33 @@
 import React from "react";
 
 const SearchResultVideoCard = ({ video }) => {
+  if (!video || !video.snippet) {
+    return null;
+  }
+
+  const { snippet } = video;
+  const { title, channelTitle, description, thumbnails } = snippet;
+
   return (
-    <div className="flex flex-col md:flex-row mb-8 md:mb-3 lg:hover:bg-white/[0.1] rounded-xl md:p-4">
-      <div className="relative flex shrink-0 h-48 md:h-28 lg:h-40 xl:h-48 w-full md:w-48 lg:w-64 xl:w-80 rounded-xl bg-slate-800 overflow-hidden">
-        <img
-          className="h-full w-full object-cover"
-          src={video?.high?.url}
-          alt="video-thumbnail"
-        />
+    <div className="flex flex-row min-h-48 ">
+      <img
+        className="m-2 p-2 w-1/7 rounded-2xl h-full max-h-64 w-full max-w-96"
+        src={thumbnails?.high?.url}
+        alt="video-thumbnail"
+      />
+
+      <div className="px-2 py-4">
+        <h2 className="font-bold">{title}</h2>
+        <div className="flex items-center">
+          <img
+            className="rounded-full w-7 h-7 mt-2 mr-2"
+            alt="channel"
+            src={thumbnails?.default?.url}
+          />
+          <p>{channelTitle}</p>
+        </div>
+        <p className="text-sm">{description}</p>
       </div>
-      SearchResultVideoCard
     </div>
   );
 };
