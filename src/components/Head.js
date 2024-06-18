@@ -41,6 +41,7 @@ const Head = () => {
 
   const handleSearch = (query) => {
     setSearchQuery(query);
+    window.location.href = `/results?search_query=${encodeURIComponent(query)}`;
   };
 
   const getSearchSuggestions = async () => {
@@ -98,10 +99,10 @@ const Head = () => {
             className="absolute bg-white py-2 px-2 w-[37rem] shadow-lg rounded-lg border border-gray-100"
           >
             <ul>
-              {suggestions.map((s) => (
+              {suggestions.map((s, id) => (
                 <div onClick={() => handleSearch(s)}>
                   <li
-                    key={s}
+                    key={id}
                     className=" custom-bg-color my-1 p-1 hover:bg-gray-300"
                   >
                     <img
