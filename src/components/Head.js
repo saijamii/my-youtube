@@ -96,7 +96,7 @@ const Head = () => {
         {showSuggestions && (
           <div
             ref={suggestionsRef}
-            className="absolute bg-white py-2 px-2 w-[37rem] shadow-lg rounded-lg border border-gray-100"
+            className="absolute bg-white py-2 px-2 w-[37rem] shadow-lg rounded-lg border border-gray-100 z-10"
           >
             <ul>
               {suggestions.map((s, id) => (
