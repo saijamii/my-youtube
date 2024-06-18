@@ -199,7 +199,6 @@ export function throttle(func, delay) {
     if (now - lastCall < delay) {
       return;
     }
-    console.log(`Throttle called at ${now - lastCall}`);
     lastCall = now;
     return func(...args);
   };
