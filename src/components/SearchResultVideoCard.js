@@ -1,4 +1,5 @@
 import React from "react";
+import { getDifference } from "../Utils/helper";
 
 const SearchResultVideoCard = ({ video }) => {
   if (!video || !video.snippet) {
@@ -6,7 +7,7 @@ const SearchResultVideoCard = ({ video }) => {
   }
 
   const { snippet } = video;
-  const { title, channelTitle, description, thumbnails } = snippet;
+  const { title, channelTitle, description, thumbnails, publishTime } = snippet;
 
   return (
     <div className="flex flex-row min-h-48 ">
@@ -25,6 +26,9 @@ const SearchResultVideoCard = ({ video }) => {
             src={thumbnails?.default?.url}
           />
           <p>{channelTitle}</p>
+          <p className="mx-2 font-semibold">
+            {getDifference(publishTime) + " ago"}
+          </p>
         </div>
         <p className="text-sm">{description}</p>
       </div>

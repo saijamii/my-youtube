@@ -204,3 +204,28 @@ export function throttle(func, delay) {
     return func(...args);
   };
 }
+
+export function getDifference(time) {
+  const currentTime = new Date();
+  const publishTime = new Date(time);
+
+  const monthsDiff =
+    (currentTime.getFullYear() - publishTime.getFullYear()) * 12 +
+    (currentTime.getMonth() - publishTime.getMonth());
+
+  // Calculate the difference in days
+  const timeDiff = currentTime.getTime() - publishTime.getTime();
+  const daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
+
+  let timeAgo;
+  if (daysDiff < 30) {
+    timeAgo = daysDiff + " days";
+  } else if (monthsDiff < 11) {
+    timeAgo = monthsDiff + " months";
+  } else {
+    const yearsDiff = Math.floor(monthsDiff / 12);
+    timeAgo = yearsDiff + " years";
+  }
+
+  return timeAgo;
+}
