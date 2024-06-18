@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { closeMenu } from "../Utils/appSlice";
 import SearchResultVideoCard from "./SearchResultVideoCard";
 import { useSearchParams } from "react-router-dom";
 import { YOUTUBE_SEARCH_API } from "../Utils/constants";
+import { throttle } from "../Utils/helper";
 
 const ResultsPage = () => {
   const [resultVideos, setResultVideos] = useState([]);
+  const [nextPageToken, setNextPageToken] = useState("");
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const query = searchParams.get("search_query");
@@ -15,6 +18,31 @@ const ResultsPage = () => {
     // eslint-disable-next-line
   }, []);
 
+  console.log(nextPageToken,"nextPageToken")
+
+  const handleScroll = useCallback(() => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.scrollHeight - 500 &&
+      !loading
+    ) {
+      fetchSearchResults();
+    }
+    // eslint-disable-next-line
+  }, [loading]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const throttledHandleScroll = useCallback(throttle(handleScroll, 500), [
+    handleScroll,
+  ]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", throttledHandleScroll);
+    return () => {
+      window.removeEventListener("scroll", throttledHandleScroll);
+    };
+  }, [handleScroll, throttledHandleScroll]);
+
   useEffect(() => {
     fetchSearchResults();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -22,11 +50,16 @@ const ResultsPage = () => {
 
   const fetchSearchResults = async () => {
     try {
-      const url = `${YOUTUBE_SEARCH_API}&q=${query}`;
+      setLoading(true);
+      const url = nextPageToken
+        ? `${YOUTUBE_SEARCH_API}&q=${query}&pageToken=${nextPageToken}`
+        : `${YOUTUBE_SEARCH_API}&q=${query}`;
       const response = await fetch(url);
       const data = await response.json();
       console.log(data, "data");
-      setResultVideos(data.items);
+      setResultVideos([...resultVideos, ...data.items]);
+      setNextPageToken(data.nextPageToken);
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
