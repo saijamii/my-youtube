@@ -8,8 +8,12 @@ function App() {
   return (
     <Provider store={store}>
       <div>
-        <Head />
-        <AppRoutes />
+        <div className="fixed-header">
+          <Head />
+        </div>
+        <div className="py-24">
+          <AppRoutes />
+        </div>
       </div>
     </Provider>
   );
