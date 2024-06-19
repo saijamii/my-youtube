@@ -25,13 +25,12 @@ function LiveChat() {
 
   const handleLiveSubmit = (e) => {
     e.preventDefault();
-    if (liveMessage !== "")
-      dispatch(
-        addMessage({
-          name: "SJ",
-          message: liveMessage,
-        })
-      );
+    dispatch(
+      addMessage({
+        name: "SJ",
+        message: liveMessage || "❤️",
+      })
+    );
     setLiveMessage("");
   };
 
@@ -49,15 +48,17 @@ function LiveChat() {
         onSubmit={handleLiveSubmit}
       >
         <input
-          className="w-full px-2"
+          className="w-full px-2 bg-slate-300 rounded-lg"
           type="text"
           onChange={(e) => {
             setLiveMessage(e.target.value);
           }}
           value={liveMessage}
         />
-        {liveMessage !== "" && (
+        {liveMessage !== "" ? (
           <button className="px-2 mx-4 bg-green-300">Send</button>
+        ) : (
+          <button className="px-2 mx-4 bg-green-300">❤️</button>
         )}
       </form>
     </>
