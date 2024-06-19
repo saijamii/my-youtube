@@ -11,7 +11,7 @@ const SearchResultVideoCard = ({ video }) => {
   const { title, channelTitle, description, thumbnails, publishTime } = snippet;
 
   return (
-    <Link to={`/watch/${id?.videoId}`}>
+    <Link to={`/watch?v=${id?.videoId}`}>
       <div className="flex flex-row min-h-48">
         <img
           className="m-2 p-2 w-1/7 rounded-2xl h-full max-h-64 w-full max-w-96"
