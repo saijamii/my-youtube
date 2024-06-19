@@ -10,7 +10,11 @@ const WatchPage = () => {
   const [searchParams] = useSearchParams();
   useEffect(() => {
     dispatch(closeMenu());
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
