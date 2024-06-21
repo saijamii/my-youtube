@@ -5,15 +5,12 @@ const VideoCard = ({ info }) => {
   const { snippet } = info;
   const { channelTitle, title, thumbnails } = snippet;
   const isMenuOpen = useSelector((store) => store.app.isMenuOpen);
-  const cardWidth = isMenuOpen ? "w-64" : "w-70";
+  const cardWidth = isMenuOpen ? "w-64" : "w-96";
   const cardPadding = isMenuOpen ? "p-2" : "p-4";
-  const cardMargin = isMenuOpen ? "w-64" : "w-70";
-  const maxWidth = isMenuOpen ? "max-" : "max-w-lg";
+  const cardMargin = isMenuOpen ? "w-64" : "w-80";
 
   return (
-    <div
-      className={`${cardPadding} ${cardMargin} ${cardWidth} ${maxWidth} shadow-lg`}
-    >
+    <div className={`${cardPadding} ${cardMargin} ${cardWidth}`}>
       <img
         className="rounded-lg hover:drop-shadow-xl"
         alt="thumbnail"
