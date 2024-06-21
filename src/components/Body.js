@@ -8,7 +8,7 @@ const Body = () => {
       <div className="fixed z-10  flex flex-row h-[calc(100%-56px)]">
         <Siderbar />
       </div>
-      <div className="grow w-[calc(100%-240px)] h-full overflow-y-auto bg-white">
+      <div className="grow w-[calc(100%-240px)] h-full overflow-y-auto overflow-x-hidden bg-white">
         <Outlet />
       </div>
     </div>
