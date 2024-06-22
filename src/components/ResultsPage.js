@@ -18,7 +18,6 @@ const ResultsPage = () => {
     // eslint-disable-next-line
   }, []);
 
-  console.log(nextPageToken,"nextPageToken")
 
   const handleScroll = useCallback(() => {
     if (
@@ -56,7 +55,6 @@ const ResultsPage = () => {
         : `${YOUTUBE_SEARCH_API}&q=${query}`;
       const response = await fetch(url);
       const data = await response.json();
-      console.log(data, "data");
       setResultVideos([...resultVideos, ...data.items]);
       setNextPageToken(data.nextPageToken);
       setLoading(false);
