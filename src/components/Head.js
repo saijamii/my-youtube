@@ -8,6 +8,7 @@ const Head = () => {
   const suggestionsRef = useRef(null);
   const inputRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [suggestionIndex, setSuggestionIndex] = useState(0);
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchCache = useSelector((store) => store.search);
@@ -62,6 +63,30 @@ const Head = () => {
     }
   };
 
+  const handleKeyPress = (event) => {
+    //Up
+    if (event.keyCode === 38) {
+      if (suggestionIndex === 0) {
+        return;
+      }
+      setSuggestionIndex(suggestionIndex - 1);
+    }
+    // Down
+    else if (event.keyCode === 40) {
+      setSuggestionIndex(suggestionIndex + 1);
+    }
+    // Enter
+    else if (event.keyCode === 13 && searchQuery !== "") {
+      setSearchQuery(suggestions[suggestionIndex]);
+      setSuggestions(searchCache[searchQuery]);
+      setSuggestionIndex(0);
+      setShowSuggestions(false);
+      window.location.href = `/results?search_query=${encodeURIComponent(
+        suggestions[suggestionIndex]
+      )}`;
+    }
+  };
+
   return (
     <div className="grid grid-flow-col p-5 m-2 shadow-lg ">
       <div className="flex col-span-1">
@@ -89,6 +114,7 @@ const Head = () => {
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={() => setShowSuggestions(true)}
           onBlur={handleClickOutside}
+          onKeyDown={handleKeyPress}
         />
         <button className="px-2 py-1 bg-gray-300 border border-gray-500 p-1 rounded-r-full">
           Search
@@ -103,7 +129,11 @@ const Head = () => {
                 <div onClick={() => handleSearch(s)}>
                   <li
                     key={id}
-                    className=" custom-bg-color my-1 p-1 hover:bg-gray-300"
+                    className={
+                      id === suggestionIndex
+                        ? "bg-[#eeeeee] items-center justify-start flex px-3 py-2 font-bold"
+                        : "items-center justify-start flex px-3 py-2 font-bold"
+                    }
                   >
                     <img
                       className="mr-2 h-4 ml-3 inline-block"
