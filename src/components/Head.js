@@ -12,6 +12,18 @@ const Head = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchCache = useSelector((store) => store.search);
+
+  useEffect(() => {
+    const storedSearchQuery = localStorage.getItem("searchQuery");
+    if (storedSearchQuery) {
+      setSearchQuery(storedSearchQuery);
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchCache[searchQuery]) {
@@ -27,13 +39,6 @@ const Head = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   const dispatch = useDispatch();
 
   const handleToggleMenu = () => {
@@ -42,6 +47,7 @@ const Head = () => {
 
   const handleSearch = (query) => {
     setSearchQuery(query);
+    localStorage.setItem("searchQuery", query);
     window.location.href = `/results?search_query=${encodeURIComponent(query)}`;
   };
 
@@ -77,12 +83,14 @@ const Head = () => {
     }
     // Enter
     else if (event.keyCode === 13 && searchQuery !== "") {
-      setSearchQuery(suggestions[suggestionIndex]);
+      let query = suggestions[suggestionIndex];
+      setSearchQuery(query);
       setSuggestions(searchCache[searchQuery]);
       setSuggestionIndex(0);
       setShowSuggestions(false);
+      localStorage.setItem("searchQuery", query);
       window.location.href = `/results?search_query=${encodeURIComponent(
-        suggestions[suggestionIndex]
+        query
       )}`;
     }
   };
