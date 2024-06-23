@@ -14,7 +14,8 @@ const Head = () => {
   const searchCache = useSelector((store) => store.search);
 
   useEffect(() => {
-    const storedSearchQuery = localStorage.getItem("searchQuery");
+    const storedSearchQuery =
+      window.location.pathname !== "/" && localStorage.getItem("searchQuery");
     if (storedSearchQuery) {
       setSearchQuery(storedSearchQuery);
     }
