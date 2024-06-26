@@ -13,6 +13,8 @@ const Head = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchCache = useSelector((store) => store.search);
 
+  console.log(suggestions[suggestionIndex],"suggestions[suggestionIndex]")
+
   useEffect(() => {
     const storedSearchQuery =
       window.location.pathname !== "/" && localStorage.getItem("searchQuery");
@@ -84,7 +86,7 @@ const Head = () => {
     }
     // Enter
     else if (event.keyCode === 13 && searchQuery !== "") {
-      let query = suggestions[suggestionIndex];
+      let query = suggestions[suggestionIndex] || searchQuery;
       setSearchQuery(query);
       setSuggestions(searchCache[searchQuery]);
       setSuggestionIndex(0);
