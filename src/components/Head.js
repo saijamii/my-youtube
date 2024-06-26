@@ -13,8 +13,6 @@ const Head = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchCache = useSelector((store) => store.search);
 
-  console.log(suggestions[suggestionIndex],"suggestions[suggestionIndex]")
-
   useEffect(() => {
     const storedSearchQuery =
       window.location.pathname !== "/" && localStorage.getItem("searchQuery");
